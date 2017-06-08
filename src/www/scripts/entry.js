@@ -9,11 +9,17 @@ requireAll(require.context("template/styles"));
 
 // Make sure to include the scheme (e.g. http://) in the URL.
 document.addEventListener("deviceready", function() {
-    Settings.loadJSON("settings.json", function (response) {
-        var settings = JSON.parse(response);
-        MxApp.initialize(settings.url, settings.hybridTabletProfile, settings.hybridPhoneProfile,
-            settings.enableOffline, settings.requirePin);
-    });
+    window.loadMxApp = function() {
+        console.log(url);
+        Settings.loadJSON("settings.json", function (response) {
+            var settings = JSON.parse(response);
+            MxApp.initialize(url, settings.hybridTabletProfile, settings.hybridPhoneProfile,
+                settings.enableOffline, settings.requirePin);
+        });
+    }
+
+    if (typeof url !== 'undefined') // This variable is injected by native code
+        window.loadMxApp();
 });
 
 module.exports = MxApp;
